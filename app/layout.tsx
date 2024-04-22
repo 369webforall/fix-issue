@@ -4,7 +4,7 @@ import "./globals.css";
 import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 const inter = Inter({ subsets: ["latin"] });
-
+import Navbar from "./Navbar";
 export const metadata: Metadata = {
   title: "Issue Tracker app",
   description: "Issue tracker app tracks all the issue, assigned to technician",
@@ -16,10 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <Theme>
-        {children}
+          <Navbar />
+        <div className="px-5">{children}</div>
         </Theme>
         </body>
     </html>
