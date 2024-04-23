@@ -23,7 +23,7 @@ const Navbar = () => {
             })}>{item.label}</Link></li>
         ))}
         </ul>
-        </nav>
+        </nav> 
     </header>
   )
 }
