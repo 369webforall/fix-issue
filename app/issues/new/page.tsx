@@ -1,6 +1,6 @@
 'use client'
-import React from 'react'
-import { Button, TextField } from '@radix-ui/themes';
+import React, {useState} from 'react'
+import { Button, TextField, Callout } from '@radix-ui/themes';
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import {useForm, Controller} from 'react-hook-form';
@@ -14,12 +14,23 @@ interface IssueFormData {
 const NewIssue = () => {
   const router = useRouter();
   const {register, control, handleSubmit, formState:{errors}} = useForm<IssueFormData>();
+const[error, setError]=useState("")
+
+  const onSubmit = handleSubmit(async(data)=>{
+    try {
+      await axios.post('/api/issues/new', data);
+      router.push('/issues/view')
+    } catch (error) {
+      setError("Unable to create issue, try again");
+    }
+})
 
   return (
-    <form className='max-w-lg space-y-4 mt-5' onSubmit={handleSubmit(async(data)=>{
-        await axios.post('/api/issues/new', data);
-        router.push('/issues/view')
-    })}>
+<div className='max-w-lg space-y-4 mt-5'>
+  {error && <Callout.Root color='orange'>
+    <Callout.Text>{error}</Callout.Text>
+      </Callout.Root>}
+    <form className='max-w-lg space-y-4 mt-5' onSubmit={onSubmit}>
       <TextField.Root placeholder='Title...' {...register('title')}>
      
       </TextField.Root>
@@ -30,6 +41,7 @@ const NewIssue = () => {
       
      <Button type='submit'>Submit Issue</Button>
     </form>
+    </div>
   )
 }
 
