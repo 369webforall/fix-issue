@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import { IssueFormSchema } from '@/app/ValidationSchema';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueFormData =z.infer<typeof IssueFormSchema>
 
@@ -18,12 +19,15 @@ const NewIssue = () => {
   const {register, control, handleSubmit, formState:{errors}} = useForm<IssueFormData>({
     resolver:zodResolver(IssueFormSchema)});
 const[error, setError]=useState("")
+const[isSubmitting, setSubmitting] = useState(false)
 
   const onSubmit = handleSubmit(async(data)=>{
     try {
+      setSubmitting(true)
       await axios.post('/api/issues/new', data);
       router.push('/issues/view')
     } catch (error) {
+      setSubmitting(false)
       setError("Unable to create issue, try again");
     }
 })
@@ -41,7 +45,7 @@ const[error, setError]=useState("")
       control={control} 
       render={({field})=><SimpleMDE placeholder="Reply to comment…"  {...field}/>} />
        <ErrorMessage>{errors.description?.message}</ErrorMessage>   
-     <Button type='submit'>Submit Issue</Button>
+     <Button type='submit' disabled={isSubmitting}>Submit Issue {isSubmitting && <Spinner />}</Button>
     </form>
     </div>
   )
