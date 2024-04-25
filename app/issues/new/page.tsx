@@ -9,10 +9,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import { IssueFormSchema } from '@/app/ValidationSchema';
-// interface IssueFormData {
-//   title:string,
-//   description:string,
-// }
+import ErrorMessage from '@/app/components/ErrorMessage';
 
 type IssueFormData =z.infer<typeof IssueFormSchema>
 
@@ -38,12 +35,12 @@ const[error, setError]=useState("")
       </Callout.Root>}
     <form className='max-w-lg space-y-4 mt-5' onSubmit={onSubmit}>
       <TextField.Root placeholder='Title...' {...register('title')}></TextField.Root>
-      {errors.title?.message && <Text as='p' color='red' my="4">{errors.title.message}</Text>  }
+      {<ErrorMessage>{errors.title?.message}</ErrorMessage>}
       <Controller 
       name="description" 
       control={control} 
       render={({field})=><SimpleMDE placeholder="Reply to comment…"  {...field}/>} />
-       {errors.description?.message && <Text as='p' color='red' my="4">{errors.description.message}</Text>  }
+       <ErrorMessage>{errors.description?.message}</ErrorMessage>   
      <Button type='submit'>Submit Issue</Button>
     </form>
     </div>
