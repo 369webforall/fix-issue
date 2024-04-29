@@ -7,7 +7,7 @@ import { Table } from '@radix-ui/themes'
 import IssueBadge from '@/app/components/IssueBadge'
 import delay from 'delay'
 const IssuePage = async () => {
- await delay(5000)
+ await delay(2000)
   let issues = await prisma.issue.findMany();
   if(!issues) notFound();
  
