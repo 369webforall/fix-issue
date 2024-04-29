@@ -3,6 +3,7 @@ import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
 import { Heading, Flex, Box } from '@radix-ui/themes'
 import IssueBadge from '@/app/components/IssueBadge'
+import Markdown from 'react-markdown'
 const IssueDetail = async ({params}:{
     params:{id:string}
 }) => {
@@ -16,8 +17,10 @@ const IssueDetail = async ({params}:{
        <IssueBadge status={issue.status} />
         <p>{issue.createdAt.toDateString()}</p>
         </Flex>
+        <Box className='prose'>
+        <Markdown>{issue.description}</Markdown>
+        </Box>
         
-        <p>{issue.description}</p>
     </Box>
   )
 }
