@@ -1,14 +1,13 @@
-import React from 'react'
-import prisma from '@/prisma/client'
+import prisma from '@/prisma/client';
 import { Table } from '@radix-ui/themes';
-import IssueBadge from '@/app/components/IssueBadge';
-import delay from 'delay';
-import Link from '@/app/components/Link';
+import {IssueBadge, Link, ActionButton} from "../../components"
+
 const IssuePage = async() => {
-  await delay(2000)
+  
   const issues = await prisma.issue.findMany();
   return (
-    <div>
+    <div className='space-y-4 mt-4'>
+      <ActionButton />
       <Table.Root variant='surface'>
   <Table.Header>
     <Table.Row>
