@@ -12,7 +12,7 @@ const IssueDetail = async({params}:{params:{id:string}}) => {
     })
     if(!issue) notFound();
   return (
-    <Box as='div' className='space-y-4' >
+    <Box as='div' className='space-y-4'>
         <Heading as='h1'>{issue.title}</Heading>
         <Flex className='space-x-4' mt="4">
         <IssueBadge status={issue.status}/>
