@@ -1,10 +1,12 @@
 import prisma from '@/prisma/client'
 import { Box, Grid, Flex } from '@radix-ui/themes'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import EditIssueButton from '../_components/EditIssueButton'
 import DeleteIssueButton from '../_components/DeleteIssueButton'
 import IssueDetails from '../_components/IssueDetails'
+import { auth } from '@/auth'
 const IssueDetailsPage = async({params}:{params:{id:string}}) => {
+    const session = await auth();
     let issue = await prisma.issue.findUnique({
         where:{
             id:params.id
@@ -18,8 +20,15 @@ const IssueDetailsPage = async({params}:{params:{id:string}}) => {
     </Box>
     <Box>
         <Flex direction="column" gap="4">
-<EditIssueButton IssueId={issue.id} />
+            {session?.user && (
+                <>
+                <EditIssueButton IssueId={issue.id} />
 <DeleteIssueButton IssueId={issue.id} />
+</>
+            )}
+
+{!session?.user && redirect('/api/auth/signin?callbackUrl=/issues/view') }
+
 </Flex>
     </Box>
     </Grid>
