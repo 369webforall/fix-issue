@@ -5,6 +5,7 @@ import EditIssueButton from '../_components/EditIssueButton'
 import DeleteIssueButton from '../_components/DeleteIssueButton'
 import IssueDetails from '../_components/IssueDetails'
 import { auth } from '@/auth'
+import AssigneeSelect from '../_components/AssigneeSelect'
 const IssueDetailsPage = async({params}:{params:{id:string}}) => {
     const session = await auth();
     let issue = await prisma.issue.findUnique({
@@ -20,6 +21,7 @@ const IssueDetailsPage = async({params}:{params:{id:string}}) => {
     </Box>
     <Box>
         <Flex direction="column" gap="4">
+            <AssigneeSelect />
             {session?.user && (
                 <>
                 <EditIssueButton IssueId={issue.id} />
