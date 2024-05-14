@@ -3,21 +3,16 @@ import React, {useState, useEffect} from 'react'
 import { Select } from '@radix-ui/themes'
 import axios from 'axios'
 import { User } from '@prisma/client'
+import {useQuery} from '@tanstack/react-query';
 
 const AssigneeSelect = () => {
-    const[users, setUsers] = useState([])
-   
-
-    useEffect(()=>{
-const fetchUser =async ()=>{
-    let {data} = await axios.get<User[]>('/api/users')
-console.log(data)
-       setUsers(data)
+const {error, isLoading, data:users}= useQuery<User[]>({
+  queryKey:['users'],
+  queryFn: ()=> axios.get('/api/users').then((res)=>res.data),
+  staleTime: 60 * 1000, // 60 sec
+  retry:3
+})
     
-}
-
-fetchUser();
-    },[])
    
   return (
     <div className='mt-4'>
