@@ -1,9 +1,10 @@
 "use client"
-import React, {useState, useEffect} from 'react'
+
 import { Select } from '@radix-ui/themes'
 import axios from 'axios'
 import { User } from '@prisma/client'
 import {useQuery} from '@tanstack/react-query';
+import Skeleton from '@/app/components/Skeleton';
 
 const AssigneeSelect = () => {
 const {error, isLoading, data:users}= useQuery<User[]>({
@@ -11,7 +12,9 @@ const {error, isLoading, data:users}= useQuery<User[]>({
   queryFn: ()=> axios.get('/api/users').then((res)=>res.data),
   staleTime: 60 * 1000, // 60 sec
   retry:3
-})
+});
+
+if(isLoading) return <Skeleton />
     
    
   return (
