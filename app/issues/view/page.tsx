@@ -4,12 +4,21 @@ import {IssueBadge, Link, ActionButton} from "../../components"
 import { Status, Issue } from '@prisma/client';
 import NextLink from 'next/link';
 import { ArrowUp } from 'lucide-react';
-
-const IssuePage = async({searchParams}:{searchParams:{status:Status, orderBy:string}}) => {
+import Pagination from './_components/Pagination';
+const IssuePage = async({searchParams}:{searchParams:{status:Status, orderBy: keyof Issue, page:string}}) => {
   
   const statuses = Object.values(Status) 
 
   const status = statuses.includes(searchParams.status) ? searchParams.status :undefined;
+
+  const defaultOrderBy: keyof Issue = 'createdAt';
+  const validOrderBys:Array<keyof Issue> =['title', 'status', 'createdAt']
+
+  const orderBy = validOrderBys.includes(searchParams.orderBy) ? searchParams.orderBy : defaultOrderBy
+
+const page = parseInt(searchParams.page) || 1;
+
+const pageSize = 10;
 
   const columns:{label:string; 
     value: keyof Issue;
@@ -24,9 +33,13 @@ const IssuePage = async({searchParams}:{searchParams:{status:Status, orderBy:str
       status: status
     },
     orderBy:{
-      [searchParams.orderBy]:'asc'
-    }
+      [orderBy]:'asc'
+    },
+    skip: (page-1)*pageSize,
+    take:pageSize
   });
+
+  const issueCount = await prisma.issue.count({where:{status}})
 
   return (
     <div className='space-y-4 mt-4'>
@@ -57,6 +70,7 @@ const IssuePage = async({searchParams}:{searchParams:{status:Status, orderBy:str
     ))}
   </Table.Body>
   </Table.Root>
+  <Pagination pageSize={pageSize} currentPage={page} itemCount={issueCount} />
     </div>
   )
 }
