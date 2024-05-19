@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 import Navbar from "./Navbar";
 import AuthWrapper from "./api/lib/auth-wrapper";
 import QueryClientProvider from "@/QueryClientProvider";
+
 export const metadata: Metadata = {
   title: "Issue Tracker app",
   description: "Issue tracker app tracks all the issue, assigned to technician",
